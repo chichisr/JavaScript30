@@ -91,9 +91,13 @@ function removePlayingTransition(e) {
 }
 
 /**
- * Bind the transitionend event listener to removePlayingTransition()
+ * Bind the transitionend event listener to removePlayingTransition().
+ * This event listener delegates the transitionend event from children of
+ * the common parent and only acts on childen with a class `key`. This
+ * is the behavior of jQuery's `.on()` method.
  */
-Object.keys(ElementsByKey).forEach(function buttonsBindTransitionEnd(key) {
-    const $button = ElementsByKey[key].button;
-    $button.addEventListener('transitionend', removePlayingTransition);
+document.getElementsByClassName('keys')[0].addEventListener('transitionend', function filterEvents(e) {
+    if (e.target.classList.contains('key')) {
+        removePlayingTransition(e);
+    }
 });
